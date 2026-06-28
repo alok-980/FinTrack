@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack Pro</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Reset */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Light Mode Variables */
+        :root {
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+            --text: #111111;
+            --text-secondary: #6b7280;
+            --primary: #1d4ed8;
+            --green: #16a34a;
+            --red: #dc2626;
+            --sidebar-w: 260px;
+            --topbar-h: 60px;
+        }
+
+        /* Dark Mode Variables */
+        body.dark {
+            --bg: #0f1117;
+            --surface: #1a1d2e;
+            --border: #2a2d3e;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="loginScreen">
+        <div class="login-box">
+            <h2>Welcome to FinTrack pro</h2>
+            <label for="loginUser">Username</label>
+            <input type="text" id="loginUser" placeholder="Username">
+            <label for="loginPass">Password</label>
+            <input type="password" id="loginPass" placeholder="Password">
+            <div id="loginErr"></div>
+            <button id="loginBtn">Login</button>
+            <p>Don't have an account? <a href="#">Register here</a></p>
+        </div>
+    </div>
+
+    <div id="app">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-title">FinTrack Pro</span>
+                <span class="logo-sub">Enterprise Finance</span>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-item" id="navDash">Dashboard</div>
+                <div class="nav-item" id="navSet">Settings</div>
+            </nav>
+            <div class="sidebar-bottom">
+                <button id="addTxBtn">
+                    + Add Transaction
+                </button>
+            </div>
+        </aside>
+
+        <div class="topbar">
+            <span id="topbarName"></span>
+            <button id="logoutBtn">Logout</button>
+        </div>
+
+        <main class="main">
+            <div id="pageDashboard" class="page">
+                <!-- Dashboard Content Here -->
+                <div class="dash-header">
+                    <h1>Financial Overview</h1>
+                    <p>Real-time tracking application</p>
+                </div>
+
+                <div class="cards-row">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏦</div>
+                        <div class="stat-label">Current Balance</div>
+                        <div class="stat-value" id="cardBal">₹0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-label">Total Income</div>
+                        <div class="stat-value" id="cardInc">₹0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📉</div>
+                        <div class="stat-label">Total Expense</div>
+                        <div class="stat-value" id="cardExp">₹0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🐷</div>
+                        <div class="stat-label">Total Transactions</div>
+                        <div class="stat-value" id="cardCnt">0</div>
+                    </div>
+                </div>
+
+                <div class="mid-row">
+                    <div class="chart-card">
+                        <h3>Cash Flow Analysis</h3>
+                        <canvas id="cashFlowChart"></canvas>
+                    </div>
+
+                    <div class="pref-card">
+                        <h3>Preferences</h3>
+                        <div class="pref-row">
+                            <span>Dark Mode</span>
+                            <label class="switch">
+                                <input type="checkbox" id="darkToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <button id="resetBtn">Reset All Data</button>
+                    </div>
+                </div>
+
+                <div class="tx-card">
+                    <h3>All Transactions</h3>
+                    <div class="tx-controls">
+                        <div class="search-wrap">
+                            <input type="text" id="searchInput" placeholder="Search transactions...">
+                        </div>
+                        <select id="typeFilter">
+                            <option value="all">All Types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="txBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pageSettings" class="page">
+                <!-- Settings Content Here -->
+                <div class="settings-header">
+                    <h1>Settings</h1>
+                    <p>Manage your account profile and app formatting.</p>
+                </div>
+                <div class="settings-box">
+                    <h3>Profile Details</h3>
+                    <div class="settings-fields">
+                        <div class="s-field">
+                            <label for="settingName">Full Name</label>
+                            <input type="text" id="settingName" placeholder="Your name">
+                        </div>
+                        <div class="s-field">
+                            <label for="settingCurrency">Primary Currency</label>
+                            <select id="settingCurrency">
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="JPY">JPY (¥)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="saveProfileBtn">Save Changes</button>
+                </div>
+            </div>
+        </main>
+
+        <div id="addModal" class="modal-overlay">
+            <div class="modal">
+                <div class="modal-head">
+                    <h3>Add Transaction</h3>
+                    <button id="modalClose">x</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="type-tabs">
+                        <button id="tabIncome">↑ Income</button>
+                        <button id="tabExpense">↓ Expense</button>
+                    </div>
+
+                    <div id="modalErr"></div>
+
+                    <div class="m-field">
+                        <label for="aDesc">Description</label>
+                        <input type="text" id="aDesc" placeholder="e.g. Monthly salary">
+                    </div>
+
+                    <div class="m-row">
+                        <div class="m-field">
+                            <label for="aAmt">Amount</label>
+                            <input type="number" id="aAmt" placeholder="0.00">
+                        </div>
+                        <div class="m-field">
+                            <label for="aDate">Date</label>
+                            <input type="date" id="aDate">
+                        </div>
+                    </div>
+
+                    <div class="m-field">
+                        <label for="aCat">Category</label>
+                        <select id="aCat">
+                            <option value="">- Select - </option>
+                            <option value="Salary">Salary</option>
+                            <option value="Food & Dining">Food & Dining</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Recharge & Bills">Recharge & Bills</option>
+                            <option value="Petrol & Auto">Petrol & Auto</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <button id="saveTxBtn">Save Transaction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+</body>
+
+</html>
